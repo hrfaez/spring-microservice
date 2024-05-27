@@ -1,19 +1,20 @@
 package com.hrfman.customer.serviceImpl;
 
+import com.hrfman.clients.fraud.FraudCheckResponse;
+import com.hrfman.clients.fraud.FraudClient;
 import com.hrfman.customer.model.Customer;
-import com.hrfman.customer.model.customerPayload.FraudCheckResponse;
 import com.hrfman.customer.model.payload.CustomerRequest;
 import com.hrfman.customer.repository.CustomerRepository;
 import com.hrfman.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImp implements CustomerService {
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
+//    private final RestTemplate restTemplate;
+    private final FraudClient fraudClient;
     @Override
     public void registerCustomer(CustomerRequest customerRequest){
         Customer customer = Customer.builder()
@@ -22,11 +23,12 @@ public class CustomerServiceImp implements CustomerService {
                 .email(customerRequest.email())
                 .build();
         customerRepository.saveAndFlush(customer);
-        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
-                "http://FRAUD/api/v1/fraud-check/{customerId}",
-                FraudCheckResponse.class,
-                customer.getId()
-        );
+//        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
+//                "http://FRAUD/api/v1/fraud-check/{customerId}",
+//                FraudCheckResponse.class,
+//                customer.getId()
+//        );
+        FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
         if (fraudCheckResponse.isFraudster()){
             throw new IllegalStateException("fraudster");
         }

@@ -1,6 +1,6 @@
 package com.hrfman.fraud.controller;
 
-import com.hrfman.fraud.model.payload.FraudCheckResponse;
+import com.hrfman.clients.fraud.FraudCheckResponse;
 import com.hrfman.fraud.service.FraudCheckHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
