@@ -2,6 +2,8 @@ package com.hrfman.customer.serviceImpl;
 
 import com.hrfman.clients.fraud.FraudCheckResponse;
 import com.hrfman.clients.fraud.FraudClient;
+import com.hrfman.clients.notification.NotificationClient;
+import com.hrfman.clients.notification.NotificationRequest;
 import com.hrfman.customer.model.Customer;
 import com.hrfman.customer.model.payload.CustomerRequest;
 import com.hrfman.customer.repository.CustomerRepository;
@@ -15,6 +17,7 @@ public class CustomerServiceImp implements CustomerService {
     private final CustomerRepository customerRepository;
 //    private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
+    private final NotificationClient notificationClient;
     @Override
     public void registerCustomer(CustomerRequest customerRequest){
         Customer customer = Customer.builder()
@@ -32,5 +35,13 @@ public class CustomerServiceImp implements CustomerService {
         if (fraudCheckResponse.isFraudster()){
             throw new IllegalStateException("fraudster");
         }
+
+        notificationClient.sendNotification(
+                new NotificationRequest(
+                        customer.getId(),
+                        customer.getEmail(),
+                        String.format("HI %s, welcome", customer.getFirstName())
+                )
+        );
     }
 }
