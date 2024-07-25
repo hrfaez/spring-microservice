@@ -13,4 +13,10 @@ public class CustomerConfig {
     public RestTemplate restTemplate(){
         return new RestTemplate();
     }
+
+//    @Bean
+//    JvmThreadMetrics threadMetrics(){
+//        return new JvmThreadMetrics();
+//    }
+
 }

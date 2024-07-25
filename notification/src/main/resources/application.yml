@@ -16,6 +16,15 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: 'true'
+  rabbitmq:
+    template:
+      exchange: internal.exchange
+      default-receive-queue: notification.queue
+      routing-key: internal.notification.routing-key
+    username: rabbitmq
+    password: rabbitmq
+    addresses: localhost:5672
+
 
 eureka:
   client:
@@ -23,3 +32,9 @@ eureka:
       zone1: http://localhsot:8761/eureka
     fetch-registry: true
     register-with-eureka: true
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
